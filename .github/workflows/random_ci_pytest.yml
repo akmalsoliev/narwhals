@@ -23,11 +23,11 @@ jobs:
           cache-suffix: ${{ matrix.python-version }}
           cache-dependency-glob: "**requirements*.txt"
       - name: install package
-        run: uv pip install -e . --system
+        run: uv sync --extra dev
       - name: generate-random-versions
-        run: python utils/generate_random_versions.py
+        run: uv run utils/generate_random_versions.py
       - name: install-reqs
-        run: uv pip install --upgrade tox virtualenv setuptools --system && uv pip install -r requirements-dev.txt --system
+        run: uv pip install --upgrade tox virtualenv setuptools --system
       - name: uninstall scipy/sklearn
         run: uv pip uninstall scipy scikit-learn --system
       - name: install-random-verions
