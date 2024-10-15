@@ -25,10 +25,8 @@ jobs:
           cache-suffix: ${{ matrix.python-version }}
           cache-dependency-glob: "**requirements*.txt"
       - name: install-reqs
-        run: uv pip install --upgrade -r requirements-dev.txt --system
-      - name: local-install
-        run: uv pip install -e . --system
+        run: uv sync --dev --upgrade
       - name: generate-data
-        run: cd tpch && python generate_data.py
+        run: cd tpch && uv run generate_data.py
       - name: tpch-tests 
-        run: cd tpch && pytest tests
+        run: cd tpch && uv run pytest tests
