@@ -25,7 +25,7 @@ jobs:
           cache-suffix: ${{ matrix.python-version }}
           cache-dependency-glob: "**requirements*.txt"
       - name: install-reqs
-        run: uv sync --dev --extra docs
+        run: uv sync --dev --extra docs --upgrade
       - name: check-no-errors
         run: uv run mkdocs build > output.txt 2>&1
       - name: assert-no-errors
