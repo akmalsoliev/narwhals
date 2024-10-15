@@ -24,15 +24,17 @@ jobs:
           enable-cache: "true"
           cache-suffix: ${{ matrix.python-version }}
           cache-dependency-glob: "**requirements*.txt"
+      - name: sync
+        run: uv sync --extra dev --upgrade
       - name: install-reqs
-        run: uv pip install --upgrade tox virtualenv setuptools -r requirements-dev.txt --system
+        run: uv pip install --upgrade tox virtualenv setuptools --system
       - name: show-deps
         run: uv pip freeze
       - name: Run pytest
-        run: pytest tests --cov=narwhals --cov=tests --cov-fail-under=85
+        run: uv run pytest tests --cov=narwhals --cov=tests --cov-fail-under=85
       - name: Run doctests
         if: startsWith(matrix.os, 'windows') != true
-        run: pytest narwhals --doctest-modules
+        run: uv run pytest narwhals --doctest-modules
 
   pytest-windows:
     strategy:
@@ -52,16 +54,18 @@ jobs:
           enable-cache: "true"
           cache-suffix: ${{ matrix.python-version }}
           cache-dependency-glob: "**requirements*.txt"
+      - name: sync
+        run: uv sync --extra dev --upgrade
       - name: install-reqs
-        run: uv pip install --upgrade tox virtualenv setuptools -r requirements-dev.txt --system
+        run: uv pip install --upgrade tox virtualenv setuptools --system
       - name: install-modin
         run: uv pip install --upgrade modin[dask] --system
       - name: show-deps
         run: uv pip freeze
       - name: Run pytest
-        run: pytest tests --cov=narwhals --cov=tests --runslow --cov-fail-under=95
+        run: uv run pytest tests --cov=narwhals --cov=tests --runslow --cov-fail-under=95
       - name: Run doctests
-        run: pytest narwhals --doctest-modules
+        run: uv run pytest narwhals --doctest-modules
 
   pytest-coverage:
     strategy:
@@ -81,8 +85,10 @@ jobs:
           enable-cache: "true"
           cache-suffix: ${{ matrix.python-version }}
           cache-dependency-glob: "**requirements*.txt"
+      - name: sync
+        run: uv sync --extra dev --upgrade
       - name: install-reqs
-        run: uv pip install --upgrade tox virtualenv setuptools -r requirements-dev.txt --system
+        run: uv pip install --upgrade tox virtualenv setuptools --system
       - name: install-modin
         run: uv pip install --upgrade modin[dask] --system
       - name: show-deps
@@ -93,6 +99,6 @@ jobs:
         # which messes with other dependencies on lower Python versions
         if: matrix.python-version == '3.12'
       - name: Run pytest
-        run: pytest tests --cov=narwhals --cov=tests --cov-fail-under=100 --runslow
+        run: uv run pytest tests --cov=narwhals --cov=tests --cov-fail-under=100 --runslow
       - name: Run doctests
-        run: pytest narwhals --doctest-modules
+        run: uv run pytest narwhals --doctest-modules
